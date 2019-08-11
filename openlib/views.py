@@ -26,20 +26,20 @@ def try_get_external_url(url, timeout=5):
         return {
             "status": "fail",
             "message": "error calling Open Library endpoint [%s]" % error,
-            "openlib_url": url
+            # "openlib_url": url
         }
     except URLError as error:
         if isinstance(error.reason, socket.timeout):
             return {
                 "status": "fail",
                 "message": "error calling Open Library endpoint; socket timed out",
-                "openlib_url": url
+                # "openlib_url": url
             }
         else:
             return {
                 "status": "fail",
                 "message": "Some other error calling Open Library endpoint",
-                "openlib_url": url
+                # "openlib_url": url
             }
 
     openlib_result = json.loads(resp.read())
@@ -48,15 +48,13 @@ def try_get_external_url(url, timeout=5):
         return {
             "status": "fail",
             "message": "Some other error calling Open Library endpoint",
-            "openlib_url": url,
-            "openlib_result": openlib_result
+            # "openlib_url": url,
+            # "openlib_result": openlib_result
         }
 
     return {
         "status": "success",
-        "message": "Open Library call successful",
-        "openlib_url": url,
-        "openlib_result": openlib_result
+        "data": {"openlib_result": openlib_result}
     }
 
 
@@ -84,9 +82,9 @@ def detail(request):
 
     # There isn't an explicit response for an invalid book key, but at this
     # point that's the most likely reason if status from Open Library is not ok
-    if data['openlib_result']['status'] != 'ok':
+    if 'data' not in data or data['data']['openlib_result']['status'] != 'ok':
         data['status'] = "fail"
-        data['message'] = "error calling Open Library endpoint; is 'key' valid?"
+        data['message'] = "error calling Open Library endpoint; is 'key' value valid?"
 
     # Success!
     return JsonResponse(data)
@@ -118,7 +116,7 @@ def search(request):
 
     # There isn't an explicit response for an invalid book key, but at this
     # point that's the most likely reason if status from Open Library is not ok
-    if data['openlib_result']['status'] != 'ok':
+    if 'data' not in data or data['data']['openlib_result']['status'] != 'ok':
         data['status'] = "fail"
         data['message'] = "error calling Open Library endpoint; no match for 'title'?"
 
