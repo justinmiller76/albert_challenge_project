@@ -42,25 +42,25 @@ def try_get_external_url(url, timeout=5):
                 "openlib_url": url
             }
 
-    resp_data = json.loads(resp.read())
+    openlib_result = json.loads(resp.read())
 
-    if resp_data['status'] != "ok":
+    if openlib_result['status'] != "ok":
         return {
             "status": "fail",
             "message": "Some other error calling Open Library endpoint",
             "openlib_url": url,
-            "openlib_result": resp_data
+            "openlib_result": openlib_result
         }
 
     return {
         "status": "success",
         "message": "Open Library call successful",
         "openlib_url": url,
-        "openlib_result": resp_data
+        "openlib_result": openlib_result
     }
 
 
-# Separate function, so it can be called internally without a get request
+# Separate function, so it can be called internally by wishlists, etc
 # Get detailed book information for key
 def get_details_for_key(key):
     url = 'http://openlibrary.org/api/get?'
