@@ -6,7 +6,7 @@ that allow users to search for books using the Open Library API in order to get 
 Additionally, it also supplies endpoints for a global “wish list” to which we can add and remove books we like, and
 retrieve a detailed listing of books that are in the wish list.
 
-###Quick Start
+### Quick Start
 1. Download the repository locally
 1. Navigate to the directory in a shell, and create a virtualenv using Python3 as its base, example `virtualenv -p /Library/Frameworks/Python.framework/Versions/3.7/bin/python3 venv`
 1. To enter the virtualenv, run `source venv/bin/activate`
@@ -17,7 +17,7 @@ retrieve a detailed listing of books that are in the wish list.
 1. Use your client of choice (eg [Postman](https://www.getpostman.com)) to 
 interact with the endpoints at http://127.0.0.1:8000/
 
-###Endpoint Usage
+### Endpoint Usage
 The endpoints fall into two categories:
 1. `/openlib` - Open Library calls
     1. `/openlib/search` - searches for books that match parameter `title`
@@ -34,9 +34,9 @@ The endpoints fall into two categories:
     1. `/wishlist/list_all` - return a list of all books in the wish list, with detailed information supplied by Open Library
         1. eg `http://127.0.0.1:8000/wishlist/list_all`
 
-###Endpoint Responses
+### Endpoint Responses
 The endpoints all return a [JSEND](https://github.com/omniti-labs/jsend) structured-result.
-####Example Success
+#### Example Success
 http://127.0.0.1:8000/openlib/search?title=Lord+of+the+Rings
 ```
 {
@@ -52,7 +52,7 @@ http://127.0.0.1:8000/openlib/search?title=Lord+of+the+Rings
     <...>
 }
 ```
-####Example Failure
+#### Example Failure
 http://127.0.0.1:8000/wishlist/add?key=/books/OL26793280M
 ```json
 {
@@ -60,13 +60,13 @@ http://127.0.0.1:8000/wishlist/add?key=/books/OL26793280M
     "message": "book already exists in wish list: /books/OL26793280M"
 }
 ```
-###Notes
-####Admin
+### Notes
+#### Admin
 As mentioned above, a typical admin panel can be found at http://127.0.0.1:8000/admin/. 
 You can tweak the wish list of Books manually here. Note that when you add a book here, there is no verification
 of the validity of a `key_text` value for a Book, as there is when you call the `/wishlist/add` endpoint.
 
-####Limitations
+#### Limitations
 * Currently there is no limit to the number of books that can be added to a wish list. Accordingly, calls to the 
 `/wishlist/list_all` endpoint could become slow due to a single call being made to Open Library for each book.
 * Attempts have been made to deal with real-world scenarios like timeouts from third-party API’s, but edge cases 
