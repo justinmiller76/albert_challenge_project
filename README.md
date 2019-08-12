@@ -8,7 +8,7 @@ retrieve a detailed listing of books that are in the wish list.
 
 ### Quick Start
 1. Download the repository locally
-1. Navigate to the directory in a shell, and create a virtualenv using Python3 as its base, example `virtualenv -p /Library/Frameworks/Python.framework/Versions/3.7/bin/python3 venv`
+1. Navigate to the directory in a shell, and create a virtualenv using Python3 as its base, example `virtualenv -p python3 venv`
 1. To enter the virtualenv, run `source venv/bin/activate`
 1. Install necessary packages into the virtualenv by running `pip install -r requirements.txt` 
 1. To create the wishlist model, run `python manage.py migrate`
