@@ -25,20 +25,20 @@ def try_get_external_url(url, timeout=5):
         print('Data not retrieved because %s\nURL: %s', error, url)
         return {
             "status": "fail",
-            "message": "error calling Open Library endpoint [%s]" % error,
+            "message": "error calling Open Library [%s]" % error,
             # "openlib_url": url
         }
     except URLError as error:
         if isinstance(error.reason, socket.timeout):
             return {
                 "status": "fail",
-                "message": "error calling Open Library endpoint; socket timed out",
+                "message": "error calling Open Library; socket timeout",
                 # "openlib_url": url
             }
         else:
             return {
                 "status": "fail",
-                "message": "Some other error calling Open Library endpoint",
+                "message": "Some other error calling Open Library",
                 # "openlib_url": url
             }
 
@@ -47,7 +47,7 @@ def try_get_external_url(url, timeout=5):
     if openlib_result['status'] != "ok":
         return {
             "status": "fail",
-            "message": "Some other error calling Open Library endpoint",
+            "message": "Some other error calling Open Library",
             # "openlib_url": url,
             # "openlib_result": openlib_result
         }
@@ -84,7 +84,7 @@ def detail(request):
     # point that's the most likely reason if status from Open Library is not ok
     if 'data' not in data or data['data']['openlib_result']['status'] != 'ok':
         data['status'] = "fail"
-        data['message'] = "error calling Open Library endpoint; is 'key' value valid?"
+        data['message'] = "error calling Open Library; is 'key' value valid?"
 
     # Success!
     return JsonResponse(data)
@@ -106,7 +106,7 @@ def search(request):
     url = 'http://openlibrary.org/api/things?'
     params_str = urlencode({
         "query":
-            # Open Library expects this query body to use double quotes instead of single
+            # Open Lib expects double quotes (not single) for this query body
             json.dumps({
                 "type": "/type/edition",
                 "title~": title
@@ -118,7 +118,7 @@ def search(request):
     # point that's the most likely reason if status from Open Library is not ok
     if 'data' not in data or data['data']['openlib_result']['status'] != 'ok':
         data['status'] = "fail"
-        data['message'] = "error calling Open Library endpoint; no match for 'title'?"
+        data['message'] = "error calling Open Library; no match for 'title'?"
 
     # Success!
     return JsonResponse(data)

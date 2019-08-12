@@ -103,8 +103,10 @@ def list_all(request):
     data = dict()
     data['book_list'] = dict()
     for key in all_keys:
+        # Assume failure: there is a bad key in the wish list
+        details = 'no details found'
+
         openlib_result = get_details_for_key(key)['data']['openlib_result']
-        details = 'no details found'  # Assume failure: there is a bad key in the wish list
         if 'result' in openlib_result:
             details = openlib_result['result']
 
