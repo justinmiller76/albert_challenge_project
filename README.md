@@ -20,22 +20,34 @@ interact with the endpoints at http://127.0.0.1:8000/
 ### Endpoint Usage
 The endpoints fall into two categories:
 1. `/openlib` - Open Library calls
-    1. `/openlib/search` - searches for books that match parameter `title`
+    1. `/openlib/search` - GET - searches for books that match parameter `title`
         1. eg `http://127.0.0.1:8000/openlib/search?title=Lord+of+the+Rings`
-    1. `/openlib/details` - gets detailed information about book matching parameter `key`
+    1. `/openlib/details` - GET - gets detailed information about book matching parameter `key`
         1. eg `http://127.0.0.1:8000/openlib/detail?key=/books/OL7668717M`
 1. `/wishlist` - wish list functionality
-    1. `/wishlist/add` - add book to wish list specified by parameter `key`
+    1. `/wishlist/add` - POST - add book to wish list specified by parameter `key`
     iff it exists in the Open Library and is not already in the wish list
-        1. eg `http://127.0.0.1:8000/wishlist/add?key=/books/OL26793280M`
+        1. eg POST body `{ "key": "/b/OL26793280M" }`
         1. NOTE: this function auto-expands keys starting with `/b/` to start with `/books/`
-    1. `/wishlist/remove` - remove book from wish list specified by parameter `key`
-        1. eg `http://127.0.0.1:8000/wishlist/remove?key=/books/OL26793280M`
-    1. `/wishlist/list_all` - return a list of all books in the wish list, with detailed information supplied by Open Library
+    1. `/wishlist/remove` - POST - remove book from wish list specified by parameter `key`
+        1. eg POST body `{ "key": "/b/OL26793280M" }`
+    1. `/wishlist/list_all` - GET - no parameters - return a list of all books in the wish list, 
+    with detailed information supplied by Open Library
         1. eg `http://127.0.0.1:8000/wishlist/list_all`
+        1. The response body includes a date->book_list section, which is a dictionary containing one entry
+         per book key, and each entry containing the details for that book, stored in a dictionary.
+            1. If an invalid book key is somehow added to the wish list, say via admin, then the 
+            value for that book in the response body is the string "no details found" instead of the 
+            details dictionary.
+            
 
 ### Endpoint Responses
 The endpoints all return a [JSEND](https://github.com/omniti-labs/jsend) structured-result.
+One slight modification is that the "fail" responses may include a message, for 
+extra help debugging the failure.
+
+The endpoints also return some http status codes for compatibility, and hopefully not to
+be confusing alongside the JSEND response body.
 #### Example Success
 http://127.0.0.1:8000/openlib/search?title=Lord+of+the+Rings
 ```
@@ -53,7 +65,7 @@ http://127.0.0.1:8000/openlib/search?title=Lord+of+the+Rings
 }
 ```
 #### Example Failure
-http://127.0.0.1:8000/wishlist/add?key=/books/OL26793280M
+http://127.0.0.1:8000/wishlist/add + `{ "key": "/b/OL26793280M" }`
 ```json
 {
     "status": "fail",
